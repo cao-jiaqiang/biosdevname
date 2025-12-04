@@ -110,6 +110,7 @@ parse_opts(int argc, char **argv)
 		opts.prefix = "em";
 }
 
+#if defined(__i386__) || defined(__x86_64__) || defined(_M_IX86)|| defined(_M_X64)
 static u_int32_t
 cpuid (u_int32_t eax, u_int32_t ecx)
 {
@@ -120,6 +121,7 @@ cpuid (u_int32_t eax, u_int32_t ecx)
 	: "%ebx", "%edx");
     return ecx;
 }
+#endif
 
 /*
   Algorithm suggested by:
@@ -129,11 +131,13 @@ cpuid (u_int32_t eax, u_int32_t ecx)
 static int
 running_in_virtual_machine (void)
 {
+#if defined(__i386__) || defined(__x86_64__) || defined(_M_IX86)|| defined(_M_X64)
     u_int32_t eax=1U, ecx=0U;
 
     ecx = cpuid (eax, ecx);
     if (ecx & 0x80000000U)
        return 1;
+#endif
     return 0;
 }
 
